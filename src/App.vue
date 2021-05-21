@@ -2,28 +2,10 @@
   <div id="app">
     <div class="wrapper">
       <div class="logo"></div>
-      <div class="big_slider">
-        <div class="big_slider_list">
-          <div v-for="(item, index) in items" :key="index" class="big_slider_item" :style="{backgroundImage: `url(${item.img})`}"></div>
-        </div>
+      <div class="big_slider" :style="{backgroundImage: `url(../assets/1.jpg)`}">
+        <!-- ${activeSlide} -->
         <div class="small_carousel">
-            <alignable-carousel :align="dynamicAlign">
-              <rl-carousel-slide v-for="(item, index) in items" :key="index">
-                          <div class="small_slider_item" :style="{backgroundImage: `url(${item.img})`}"></div>
-
-              </rl-carousel-slide>
-            </alignable-carousel>
-          <div class="flex justify-around">
-            <button @click="dynamicAlign = 'left'">
-              Left
-            </button>
-            <button @click="dynamicAlign = 'center'">
-              Centre
-            </button>
-            <button @click="dynamicAlign = 'right'">
-              Right
-            </button>
-          </div>
+          <div v-for="(item, index) in items" :key="index" class="small_carousel_item" :style="{backgroundImage: `url(${item.img})`}"></div>
         </div>
         <div class="big_slider_nav"></div>
         <div class="big_slider_counter"></div>
@@ -35,13 +17,13 @@
   </div>
 </template>
 <script>
-import AlignableCarousel from './components/AlignableCarousel'
 export default {
   components:{
-    AlignableCarousel
+    
   },
   data() {
     return {
+      activeSlide: '',
       items: [
         {
           title: "Test title slide 1",
@@ -67,8 +49,11 @@ export default {
     };
   },
   methods: {
-    dynamicAlign(){
-      console.log('dynamicAlign');
+    prev(item){
+      this.activeSlide = item.img
+    },
+    next(item){
+      this.activeSlide = item.img
     }
   }
 };
@@ -119,10 +104,12 @@ body
 .small
   &_carousel
     position: relative
+    display: flex
+    max-width: 700px
+    justify-content: flex-start
+    flex-direction: row
     z-index: 110
-  &_slider
     &_item
-      width: 300px
-      height: 400px
+      margin: 20px
       background-color: #333
 </style>
