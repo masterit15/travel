@@ -37,16 +37,16 @@ export default {
       title: 'pizdaty travel',
       text: 'Далеко-далеко за словесными горами, в стране гласных и согласных живут рыбные тексты. Выйти залетают lorem там до точках повстречался вдали океана пояс, за предупредила ipsum реторический дал строчка, свой правилами оксмокс снова?',
       options: {
-          //autoplay: true,
+          autoplay: true,
           type   : 'slide',
-			  	//rewind : true,
+			  	rewind : true,
           //autoWidth: true,
 				  width  : '1000px',
 				  perPage: 3,
           perMove: 1,
 				  gap    : '30px',
           fixedHeight: '400px',
-          // fixedWidth: '300px',
+          fixedWidth: '300px',
 			  },
       items: [
         {
@@ -119,9 +119,9 @@ export default {
       
     },
     onInActive(splide){
-      // let Items = document.querySelectorAll('.splide__slide')
-      // Items[splide.index].querySelector('.small_carousel_item').classList.add('fade')
-      // console.log('activeItem', Items[splide.index]);
+      let Items = document.querySelectorAll('.splide__slide')
+      Items[splide.index].querySelector('.small_carousel_item').classList.add('fade')
+      console.log('activeItem', Items[splide.index]);
     }
   }
 };
