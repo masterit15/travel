@@ -11,7 +11,7 @@
               <div class="big_slider_hidden"><p class="big_slider_text">{{text}}</p></div>
           </div>
           <div class="small_carousel">
-            <splide :options="options" @splide:active="onActive()">
+            <splide :options="options" @splide:active="onActive" @splide:move="onInActive" >
               <splide-slide v-for="(item, index) in items" :key="index">
                 <div class="small_carousel_item" :data-img="item.img" :data-title="item.title" :data-text="item.text" :style="{backgroundImage: `url(${item.img})`}"></div>
               </splide-slide>
@@ -37,14 +37,15 @@ export default {
       title: 'pizdaty travel',
       text: 'Далеко-далеко за словесными горами, в стране гласных и согласных живут рыбные тексты. Выйти залетают lorem там до точках повстречался вдали океана пояс, за предупредила ipsum реторический дал строчка, свой правилами оксмокс снова?',
       options: {
-          autoplay: true,
-          type   : 'loop',
-			  	rewind : true,
+          //autoplay: true,
+          type   : 'slide',
+			  	//rewind : true,
+          //autoWidth: true,
 				  width  : '1000px',
 				  perPage: 3,
           perMove: 1,
-				  gap    : '40px',
-          fixedHeight: '370px',
+				  gap    : '30px',
+          fixedHeight: '400px',
           // fixedWidth: '300px',
 			  },
       items: [
@@ -99,15 +100,16 @@ export default {
       this.text = activeItem.dataset.text
     },
     onActive(splide){
-      console.log('onActive');
       let activeItem = document.querySelector('.splide__slide.is-active>.small_carousel_item')
       let slideTitle = document.querySelector('.big_slider_title')
       let slideText = document.querySelector('.big_slider_text')
       slideTitle.classList.remove('show')
       slideText.classList.remove('show')
-      
-      out
+      slideTitle.classList.add('out')
+      slideText.classList.add('out')
       setTimeout(()=>{
+        slideTitle.classList.remove('out')
+        slideText.classList.remove('out')
         slideTitle.classList.add('show')
         slideText.classList.add('show')
         this.title = activeItem.dataset.title
@@ -116,21 +118,10 @@ export default {
       this.activeSlide = activeItem.dataset.img
       
     },
-    // onInActive(){
-    //   let activeItem = document.querySelector('.splide__slide.is-active>.small_carousel_item')
-    //   let slideTitle = document.querySelector('.big_slider_title')
-    //   let slideText = document.querySelector('.big_slider_text')
-    //   slideTitle.classList.remove('show')
-    //   slideText.classList.remove('show')
-    //   this.activeSlide = activeItem.dataset.img
-    //   this.title = activeItem.dataset.title
-    //   this.text = activeItem.dataset.text
-    // },
-    prev(item){
-      this.activeSlide = item.img
-    },
-    next(item){
-      this.activeSlide = item.img
+    onInActive(splide){
+      // let Items = document.querySelectorAll('.splide__slide')
+      // Items[splide.index].querySelector('.small_carousel_item').classList.add('fade')
+      // console.log('activeItem', Items[splide.index]);
     }
   }
 };
