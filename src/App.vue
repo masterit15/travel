@@ -11,11 +11,7 @@
               <div class="big_slider_hidden"><p class="big_slider_text">{{text}}</p></div>
           </div>
           <div class="small_carousel">
-            <splide :options="options" @splide:active="onActive" @splide:move="onInActive" >
-              <splide-slide v-for="(item, index) in items" :key="index">
-                <div class="small_carousel_item" :data-img="item.img" :data-title="item.title" :data-text="item.text" :style="{backgroundImage: `url(${item.img})`}"></div>
-              </splide-slide>
-            </splide>
+            <div v-for="(item, index) in items" :key="index" class="small_carousel_item" :data-img="item.img" :data-title="item.title" :data-text="item.text" :data-index="index" :style="{backgroundImage: `url(${item.img})`}"></div>
           </div>
         </div>
       </div>
@@ -27,6 +23,7 @@
 </template>
 <script>
 const img = require('./assets/images/1.jpg')
+import { tns } from "tiny-slider/src/tiny-slider"
 export default {
   components:{
     
@@ -39,8 +36,11 @@ export default {
       options: {
           autoplay: true,
           type   : 'slide',
-			  	rewind : true,
-          //autoWidth: true,
+          // loop
+			  	// rewind : true,
+          speed: 1000,
+          easing: 'cubic-bezier(0.795, 0.005, 0.260, 1.010)',
+          updateOnMove: true,
 				  width  : '1000px',
 				  perPage: 3,
           perMove: 1,
@@ -92,6 +92,14 @@ export default {
       ],
     };
   },
+  mounted(){
+    let slider = tns({
+      container: '.small_carousel',
+      items: 3,
+      slideBy: 'page',
+      autoplay: true
+    });
+  },
   methods: {
     onMounted(splide){
       let activeItem = document.querySelector('.splide__slide.is-active>.small_carousel_item')
@@ -103,25 +111,43 @@ export default {
       let activeItem = document.querySelector('.splide__slide.is-active>.small_carousel_item')
       let slideTitle = document.querySelector('.big_slider_title')
       let slideText = document.querySelector('.big_slider_text')
-      slideTitle.classList.remove('show')
-      slideText.classList.remove('show')
-      slideTitle.classList.add('out')
-      slideText.classList.add('out')
+      // slideTitle.classList.remove('show')
+      // slideText.classList.remove('show')
       setTimeout(()=>{
-        slideTitle.classList.remove('out')
-        slideText.classList.remove('out')
-        slideTitle.classList.add('show')
-        slideText.classList.add('show')
+        // slideTitle.classList.add('show')
+        // slideText.classList.add('show')
         this.title = activeItem.dataset.title
         this.text = activeItem.dataset.text
       },400)
       this.activeSlide = activeItem.dataset.img
       
     },
-    onInActive(splide){
+    onInActive(splide, newIndex, oldIndex, destIndex){
+      // console.log(newIndex, oldIndex);
+      let slideTitle = document.querySelector('.big_slider_title')
+      let slideText = document.querySelector('.big_slider_text')
       let Items = document.querySelectorAll('.splide__slide')
-      Items[splide.index].querySelector('.small_carousel_item').classList.add('fade')
-      console.log('activeItem', Items[splide.index]);
+      Items.forEach(item=>{
+        item.classList.remove('fade')
+      })
+      
+      if(newIndex > oldIndex){
+        slideTitle.style.transform = 'translateY(100px)'
+        slideText.style.transform = 'translateY(100px)'
+        slideTitle.style.transform = 'translateY(0px)'
+        slideText.style.transform = 'translateY(0px)'
+        Items[splide.index].classList.add('fade')
+        setTimeout(()=>{Items[splide.index].classList.remove('fade')},400)
+      }else{
+        slideTitle.style.transform = 'translateY(-100px)'
+        slideText.style.transform = 'translateY(-100px)'
+        slideTitle.style.transform = 'translateY(0px)'
+        slideText.style.transform = 'translateY(0px)'
+      }
+      
+    },
+    arrowAction(splide, newIndex, oldIndex, destIndex){
+      console.log(prevIndex, nextIndex);
     }
   }
 };
